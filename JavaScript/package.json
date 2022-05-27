@@ -1,0 +1,29 @@
+{
+  "name": "companynumbercalculatorjs",
+  "version": "1.0.0",
+  "description": "法人番号計算機",
+  "main": "main.js",
+  "type": "module",
+  "engines": {
+    "node": ">14.19.0"
+  },
+  "scripts": {
+    "test": "ava --verbose tests/",
+    "prettier": "prettier --write .",
+    "eslint": "eslint --cache --ext .js .",
+    "eslint:fix": "eslint --cache --ext .js . --fix",
+    "ci": "run-p eslint test"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.16.0",
+    "eslint-plugin-ava": "^13.2.0",
+    "eslint-plugin-node": "^11.1.0",
+    "prettier": "^2.6.2"
+  },
+  "dependencies": {
+    "ava": "^4.2.0",
+    "eslint-config-prettier": "^8.5.0"
+  }
+}
