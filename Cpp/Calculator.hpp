@@ -74,5 +74,7 @@ inline std::string CalcCompanyNumber(std::string arg) {
     CalculationImpl::ConvertNumTextToHalfSizeString(arg);
     const std::vector<unsigned long> NumArr = CalculationImpl::SplitAll(arg);
     if (NumArr.empty()) return {};
-    return CalculationImpl::GenerateCompanyNumber(CalculationImpl::CalcCheckDigit(NumArr), NumArr);
+    const unsigned long CheckDigit = CalculationImpl::CalcCheckDigit(NumArr);
+    if (CheckDigit == 0) return {};
+    return CalculationImpl::GenerateCompanyNumber(CheckDigit, NumArr);
 }
