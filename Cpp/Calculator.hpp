@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <regex>
 #include <utility>
+#include <algorithm>
 
 namespace CalculationImpl {
     namespace {
@@ -43,6 +44,7 @@ namespace CalculationImpl {
     }
 
     inline unsigned long CalcCheckDigit(const std::vector<unsigned long>& arr) {
+        if (arr.size() != 12 || std::any_of(arr.begin(), arr.end(), [](const unsigned long& v) { return v > 9; })) return 0;
         bool b = false;
         unsigned long TotalBuf[2] = { 0, 0 };
         for (const unsigned long& i : arr) TotalBuf[std::exchange(b, !b)] += i;
@@ -50,7 +52,8 @@ namespace CalculationImpl {
     }
 
     inline std::string GenerateCompanyNumber(const unsigned long& CheckDigit, const std::vector<unsigned long>& arr) {
-        if (arr.size() != 12) return {};
+        if (arr.size() != 12 || std::any_of(arr.begin(), arr.end(), [](const unsigned long& v) { return v > 9; }) || CheckDigit == 0 || CheckDigit > 9) return {};
+
         std::string Ret = std::to_string(CheckDigit) + "-";
         size_t start = Ret.size();
         size_t last = Ret.size();
