@@ -14,6 +14,10 @@ namespace TestCaseStrings {
 
 constexpr const char* GeneratedCompanyNumber = "8-7001-1000-5901";
 
+inline void Test_AllValueIsHalfNumberText(const std::string& arg, const bool& CorrectVal) {
+    IUTEST_ASSERT_EQ(CalculationImpl::AllValueIsHalfNumberText(arg), CorrectVal);
+}
+
 inline void Test_CheckArg(const std::string& arg, const bool& CorrectVal) {
     IUTEST_ASSERT_EQ(CalculationImpl::CheckArg(arg), CorrectVal);
 }
@@ -34,6 +38,13 @@ inline void Test_GenerateCompanyNumber(const unsigned long& CheckDigit, const st
 inline void Test_CalcCompanyNumber(const std::string& src, const std::string& CorrectVal) {
     IUTEST_ASSERT_EQ(CalcCompanyNumber(src), CorrectVal);
 }
+
+// 半角数字12文字かどうかの判定テスト
+IUTEST_PMZ(ImplMethodTest_AllValueIsHalfNumberText, Equal0, Test_AllValueIsHalfNumberText, TestCaseStrings::CorrectCase1, true);
+IUTEST_PMZ(ImplMethodTest_AllValueIsHalfNumberText, Equal1, Test_AllValueIsHalfNumberText, TestCaseStrings::CorrectCase2, false);
+IUTEST_PMZ(ImplMethodTest_AllValueIsHalfNumberText, Equal2, Test_AllValueIsHalfNumberText, TestCaseStrings::CorrectCase3, false);
+IUTEST_PMZ(ImplMethodTest_AllValueIsHalfNumberText, Equal3, Test_AllValueIsHalfNumberText, TestCaseStrings::InvalidCase1, false);
+IUTEST_PMZ(ImplMethodTest_AllValueIsHalfNumberText, Equal4, Test_AllValueIsHalfNumberText, TestCaseStrings::InvalidCase2, false);
 
 // 引数検査のテスト
 IUTEST_PMZ(ImplMethodTest_CheckArg, Equal0, Test_CheckArg, TestCaseStrings::CorrectCase1, true);
