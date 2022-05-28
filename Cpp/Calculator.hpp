@@ -16,6 +16,11 @@ namespace CalculationImpl {
         }
     }
 
+    inline bool AllValueIsHalfNumberText(const std::string& val) {
+        static const std::regex r(R"([0-9]{12})");
+        return std::regex_match(val, r);
+    }
+
     inline bool CheckArg(const std::string& val) {
         static const std::regex r(R"([0-9０-９]{12,36})");
         return std::regex_match(val, r);
@@ -36,8 +41,7 @@ namespace CalculationImpl {
     }
 
     inline unsigned long CalcCheckDigit(const std::string& val) {
-        static const std::regex r(R"([0-9]{12})");
-        if (!std::regex_match(val, r)) return {};
+        if (!AllValueIsHalfNumberText(val)) return {};
 
         unsigned long TotalBuf[2] = { 0, 0 };
         for (int i = 0; i < 6; i++) {
@@ -48,8 +52,7 @@ namespace CalculationImpl {
     }
 
     inline std::string GenerateCompanyNumber(const unsigned long& CheckDigit, const std::string& val) {
-        static const std::regex r(R"([0-9]{12})");
-        if (!std::regex_match(val, r) || CheckDigit == 0 || CheckDigit > 9) return {};
+        if (!AllValueIsHalfNumberText(val) || CheckDigit == 0 || CheckDigit > 9) return {};
         return std::to_string(CheckDigit) + "-" + val.substr(0, 4) + "-" + val.substr(4, 4) + "-" + val.substr(8, 4);
     }
 }
