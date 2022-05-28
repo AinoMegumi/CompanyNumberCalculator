@@ -58,7 +58,7 @@ namespace CalculationImpl {
         size_t start = Ret.size();
         size_t last = Ret.size();
         for (const unsigned long& i : arr) {
-            Ret += std::to_string(CheckDigit);
+            Ret += std::to_string(i);
             if (++last - start == 4) {
                 Ret += "-";
                 start = ++last;
