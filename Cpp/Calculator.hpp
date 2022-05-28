@@ -6,7 +6,7 @@
 
 namespace CalculationImpl {
     namespace {
-        void ReplaceString(std::string& src, const std::string oldStr, const std::string newStr) noexcept {
+        void ReplaceString(std::string& src, const std::string& oldStr, const std::string& newStr) noexcept {
             std::string::size_type Pos(src.find(oldStr));
             while( Pos != std::string::npos ) {
                 src.replace(Pos, oldStr.length(), newStr);
