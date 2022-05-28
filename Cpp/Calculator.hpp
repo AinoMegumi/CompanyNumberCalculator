@@ -22,6 +22,7 @@ namespace CalculationImpl {
     }
 
     inline void ConvertNumTextToHalfSizeString(std::string& str) {
+
         ReplaceString(str, "０", "0");
         ReplaceString(str, "１", "1");
         ReplaceString(str, "２", "2");
@@ -34,47 +35,30 @@ namespace CalculationImpl {
         ReplaceString(str, "９", "9");
     }
 
-    inline std::vector<unsigned long> SplitAll(const std::string& str) {
+    inline unsigned long CalcCheckDigit(const std::string& val) {
         static const std::regex r(R"([0-9]{12})");
-        if (!std::regex_match(str, r)) return {};
+        if (!std::regex_match(val, r)) return {};
 
-        std::vector<unsigned long> Ret{};
-        for (const auto& i : str) Ret.emplace_back(static_cast<unsigned long>(i - '0'));
-        return Ret;
-    }
-
-    inline unsigned long CalcCheckDigit(const std::vector<unsigned long>& arr) {
-        if (arr.size() != 12 || std::any_of(arr.begin(), arr.end(), [](const unsigned long& v) { return v > 9; })) return 0;
-        bool b = false;
         unsigned long TotalBuf[2] = { 0, 0 };
-        for (const unsigned long& i : arr) TotalBuf[std::exchange(b, !b)] += i;
+        for (int i = 0; i < 6; i++) {
+            TotalBuf[0] += static_cast<unsigned long>(val[i * 2] - '0');
+            TotalBuf[1] += static_cast<unsigned long>(val[i * 2 + 1] - '0');
+        }
         return 9 - ((TotalBuf[0] * 2 + TotalBuf[1]) % 9);
     }
 
-    inline std::string GenerateCompanyNumber(const unsigned long& CheckDigit, const std::vector<unsigned long>& arr) {
-        if (arr.size() != 12 || std::any_of(arr.begin(), arr.end(), [](const unsigned long& v) { return v > 9; }) || CheckDigit == 0 || CheckDigit > 9) return {};
-
-        std::string Ret = std::to_string(CheckDigit) + "-";
-        size_t start = Ret.size();
-        size_t last = Ret.size();
-        for (const unsigned long& i : arr) {
-            Ret += std::to_string(i);
-            if (++last - start == 4) {
-                Ret += "-";
-                start = ++last;
-            }
-        }
-        Ret.erase(Ret.end() - 1);
-        return Ret;
+    inline std::string GenerateCompanyNumber(const unsigned long& CheckDigit, const std::string& val) {
+        static const std::regex r(R"([0-9]{12})");
+        if (!std::regex_match(val, r) || CheckDigit == 0 || CheckDigit > 9) return {};
+        return std::to_string(CheckDigit) + "-" + val.substr(0, 4) + "-" + val.substr(4, 4) + "-" + val.substr(8, 4);
     }
 }
 
 inline std::string CalcCompanyNumber(std::string arg) {
     if (!CalculationImpl::CheckArg(arg)) return {};
     CalculationImpl::ConvertNumTextToHalfSizeString(arg);
-    const std::vector<unsigned long> NumArr = CalculationImpl::SplitAll(arg);
-    if (NumArr.empty()) return {};
-    const unsigned long CheckDigit = CalculationImpl::CalcCheckDigit(NumArr);
+
+    const unsigned long CheckDigit = CalculationImpl::CalcCheckDigit(arg);
     if (CheckDigit == 0) return {};
-    return CalculationImpl::GenerateCompanyNumber(CheckDigit, NumArr);
+    return CalculationImpl::GenerateCompanyNumber(CheckDigit, arg);
 }
