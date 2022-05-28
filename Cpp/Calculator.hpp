@@ -36,7 +36,7 @@ namespace CalculationImpl {
 
     inline std::vector<unsigned long> SplitAll(const std::string& str) {
         static const std::regex r(R"([0-9]{12})");
-        if (std::regex_match(str, r)) return {};
+        if (!std::regex_match(str, r)) return {};
 
         std::vector<unsigned long> Ret{};
         for (const auto& i : str) Ret.emplace_back(static_cast<unsigned long>(i - '0'));
