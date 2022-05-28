@@ -17,7 +17,7 @@ namespace CalculationImpl {
     }
 
     inline bool CheckArg(const std::string& val) {
-        static const std::regex r(R"([0-9０-９]{12})");
+        static const std::regex r(R"([0-9０-９]{12,36})");
         return std::regex_match(val, r);
     }
 
