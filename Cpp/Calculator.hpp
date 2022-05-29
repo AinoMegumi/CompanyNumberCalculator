@@ -1,9 +1,5 @@
 #include <string>
-#include <vector>
-#include <unordered_map>
 #include <regex>
-#include <utility>
-#include <algorithm>
 
 namespace CalculationImpl {
     inline bool AllValueIsHalfNumberText(const std::string& val) {
@@ -46,7 +42,6 @@ namespace CalculationImpl {
 inline std::string CalcCompanyNumber(std::string arg) {
     if (!CalculationImpl::CheckArg(arg)) return {};
     CalculationImpl::ConvertNumTextToHalfSizeString(arg);
-
     const unsigned long CheckDigit = CalculationImpl::CalcCheckDigit(arg);
     if (CheckDigit == 0) return {};
     return CalculationImpl::GenerateCompanyNumber(CheckDigit, arg);
