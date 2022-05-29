@@ -6,16 +6,6 @@
 #include <algorithm>
 
 namespace CalculationImpl {
-    namespace {
-        void ReplaceString(std::string& src, const std::string& oldStr, const std::string& newStr) noexcept {
-            std::string::size_type Pos(src.find(oldStr));
-            while( Pos != std::string::npos ) {
-                src.replace(Pos, oldStr.length(), newStr);
-                Pos = src.find(oldStr, Pos + newStr.length());
-            }
-        }
-    }
-
     inline bool AllValueIsHalfNumberText(const std::string& val) {
         static const std::regex r(R"([0-9]{12})");
         return std::regex_match(val, r);
@@ -27,17 +17,15 @@ namespace CalculationImpl {
     }
 
     inline void ConvertNumTextToHalfSizeString(std::string& str) {
-
-        ReplaceString(str, "０", "0");
-        ReplaceString(str, "１", "1");
-        ReplaceString(str, "２", "2");
-        ReplaceString(str, "３", "3");
-        ReplaceString(str, "４", "4");
-        ReplaceString(str, "５", "5");
-        ReplaceString(str, "６", "6");
-        ReplaceString(str, "７", "7");
-        ReplaceString(str, "８", "8");
-        ReplaceString(str, "９", "9");
+        std::string Ret{};
+        for (const char& c : str) {
+            if (c >= '0' && c <= '9') Ret += c;
+            else {
+                if (const unsigned int i = static_cast<unsigned int>(c); i < 0xffffff90 || i > 0xffffff99) continue;
+                Ret += c - 0xffffff90 + '0';
+            }
+        }
+        str = Ret;
     }
 
     inline unsigned long CalcCheckDigit(const std::string& val) {
